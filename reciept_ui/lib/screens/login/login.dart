@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reciept_ui/screens/register/register.dart';
+import 'package:plant_app/screens/register/register.dart';
 
 class Login extends StatelessWidget {
   @override

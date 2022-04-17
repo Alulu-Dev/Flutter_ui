@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reciept_ui/screens/wallet/components/body.dart';
+import 'package:plant_app/screens/wallet/components/body.dart';
 
 class DetailsScreen extends StatelessWidget {
   @override

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '/screens/login/login.dart';
+import '/screens/settings/components/profile.dart';
+import '/screens/settings/settings.dart';
 import '/screens/wallet/details_screen.dart';
 
 import '../constants.dart';
@@ -65,7 +67,7 @@ class MyBottomNavBar extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>Login() ,
+                  builder: (context) =>Profile() ,
                 ),
               );
             },
@@ -76,7 +78,7 @@ class MyBottomNavBar extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>Login() ,
+                  builder: (context) =>Settings() ,
                 ),
               );
             },
