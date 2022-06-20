@@ -13,6 +13,7 @@ import 'package:receipt_management/home/wallet/bloc/bloc.dart';
 import 'package:receipt_management/requests/bloc/request_bloc.dart';
 
 import 'config/routes.dart';
+import 'home/prediction/bloc/prediction_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,6 +45,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => UserRequestBloc()),
         BlocProvider(create: (context) => PredictionBloc()),
         BlocProvider(create: (context) => ReceiptsSummaryBloc()),
+        BlocProvider(create: (context) => ReceiptsSummaryListBloc()),
+        BlocProvider(create: (context) => ReceiptsSummaryDetailsBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

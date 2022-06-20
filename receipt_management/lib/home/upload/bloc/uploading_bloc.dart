@@ -8,15 +8,29 @@ class UploadBloc extends Bloc<UploadEvent, UploadState> {
       ReceiptUploadRepository();
   UploadBloc() : super(UploadInitial()) {
     on<UploadImage>(_onUploadImage);
+    on<ReceiptsSave>(_onReceiptSave);
   }
   Future<void> _onUploadImage(
       UploadImage event, Emitter<UploadState> emit) async {
     try {
-      print('object');
-      final statusCode =
+      emit(UploadProcessing());
+      final _receiptData =
           await receiptUploadRepository.imageRoute(event.receiptImage);
-      print(statusCode);
-      emit(UploadingImage());
+      emit(UploadingImage(
+        receiptImage: event.receiptImage,
+        receiptData: _receiptData,
+      ));
+    } catch (e) {
+      emit(UploadFailed(errorMsg: "Upload Failed"));
+    }
+  }
+
+  Future<void> _onReceiptSave(
+      ReceiptsSave event, Emitter<UploadState> emit) async {
+    try {
+      final _receiptData = await receiptUploadRepository.uploadReceipt(
+          event.receiptImage, event.receiptData, event.catId, event.note);
+      emit(UploadedReceipt(receiptID: _receiptData));
     } catch (e) {
       emit(UploadFailed(errorMsg: "Upload Failed"));
     }

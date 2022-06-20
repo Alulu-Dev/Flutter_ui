@@ -44,6 +44,7 @@ class ComparisonDataProvider {
       Uri.parse("$_baseUrl/$itemId/"),
       headers: {'cookie': 'session=$sessionID'},
     );
+
     if (response.statusCode == 200) {
       final _responseBody = jsonDecode(response.body);
 
@@ -74,6 +75,7 @@ class ComparisonDataProvider {
       Uri.parse("$_baseUrl/results/$recordId/"),
       headers: {'cookie': 'session=$sessionID'},
     );
+    print(response);
     if (response.statusCode == 200) {
       final _responseBody = jsonDecode(response.body);
 

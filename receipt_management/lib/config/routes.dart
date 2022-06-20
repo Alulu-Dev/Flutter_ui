@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:receipt_management/budget/screens/budgets_screens.dart';
 import 'package:receipt_management/budget/screens/new_budget_screen.dart';
+import 'package:receipt_management/expense/screens/receipts_summaries.dart';
+import 'package:receipt_management/expense/screens/receipts_summary_details.dart';
 import 'package:receipt_management/expense/screens/summary_by_receipt.dart';
 import 'package:receipt_management/home/comparison/screens/comparison_detail_screen.dart';
 import 'package:receipt_management/expense/screens/summary_by_category_details.dart';
@@ -18,19 +20,18 @@ import '../home/wallet/screens/receipt_detail_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    // Getting arguments passed in while calling Navigator.pushNamed
     final args = settings.arguments;
 
     switch (settings.name) {
       case '/login':
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case '/register':
-        return MaterialPageRoute(builder: (_) => RegisterScreen());
+        return MaterialPageRoute(builder: (_) => const RegisterScreen());
 
       case '/home':
-        return MaterialPageRoute(builder: (_) => HomePage());
+        return MaterialPageRoute(builder: (_) => const HomePage());
       case '/receiptUpload':
-        return MaterialPageRoute(builder: (_) => ReceiptUploadPage());
+        return MaterialPageRoute(builder: (_) => const ReceiptUploadPage());
       case '/receiptDetails':
         if (args is String) {
           return MaterialPageRoute(
@@ -50,15 +51,16 @@ class RouteGenerator {
         return _errorRoute();
 
       case '/receiptScanning':
-        if (args is File) {
+        if (args is List) {
           return MaterialPageRoute(
               builder: (_) => ReceiptScanningScreen(
-                    image: args,
+                    image: args[0],
+                    receiptData: args[1],
                   ));
         }
         return _errorRoute();
       case '/expenseSummary':
-        return MaterialPageRoute(builder: (_) => ExpenseSummaryScreen());
+        return MaterialPageRoute(builder: (_) => const ExpenseSummaryScreen());
       case '/expenseDetail':
         if (args is String) {
           return MaterialPageRoute(
@@ -78,18 +80,17 @@ class RouteGenerator {
       case '/requests':
         return MaterialPageRoute(builder: (_) => const RequestScreen());
 
-      // case '/second':
-      //   // Validation of correct data type
-      //   if (args is String) {
-      //     return MaterialPageRoute(
-      //       builder: (_) => SecondPage(
-      //             data: args,
-      //           ),
-      //     );
-      //   }
-      //   // If args is not of the correct type, return an error page.
-      //   // You can also throw an exception while in development.
-      //   return _errorRoute();
+      case "/receiptSummary":
+        return MaterialPageRoute(builder: (_) => const ReceiptsSummaryScreen());
+      case "/receiptSummaryDetails":
+        if (args is String) {
+          return MaterialPageRoute(
+              builder: (_) => ReceiptsSummaryScreenDetails(
+                    summaryId: args,
+                  ));
+        }
+        return _errorRoute();
+
       default:
         // If there is no such named route in the switch statement, e.g. /third
         return _errorRoute();

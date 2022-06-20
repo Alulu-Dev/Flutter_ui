@@ -10,7 +10,13 @@ abstract class ReceiptEvent {}
 
 class ReceiptUnload extends ReceiptEvent {}
 
-class ReceiptDelete extends ReceiptEvent {}
+class ReceiptDelete extends ReceiptEvent {
+  final String receiptID;
+
+  ReceiptDelete({
+    required this.receiptID,
+  });
+}
 
 class ReceiptLoad extends ReceiptEvent {
   final String receiptID;

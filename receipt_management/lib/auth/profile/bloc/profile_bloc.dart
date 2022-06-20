@@ -16,12 +16,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileLoad>(_onProfileLoad);
     on<ProfileEdit>(_onProfileEdit);
     on<ProfileSave>(_onProfileSave);
+    on<ProfileDelete>(_onProfileDelete);
   }
 
   @override
   Future<void> close() {
     // dispose
-    print(123);
     emit(ProfileUnloaded());
     return super.close();
   }
@@ -29,6 +29,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Future<void> _onProfileUnload(
       ProfileUnload event, Emitter<ProfileState> emit) async {
     emit(ProfileUnloaded());
+  }
+
+  Future<void> _onProfileDelete(
+      ProfileDelete event, Emitter<ProfileState> emit) async {
+    await _preference.removeSession();
+    emit(ProfileUnloaded());
+    emit(ProfileLoggedOut());
   }
 
   Future<void> _onProfileLogout(

@@ -14,3 +14,5 @@ class ReceiptImage extends Equatable {
   //   return ReceiptImage(receiptImage: json['file']);
   // }
 }
+
+

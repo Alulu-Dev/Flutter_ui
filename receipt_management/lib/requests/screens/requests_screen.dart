@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_management/requests/bloc/bloc.dart';
@@ -16,8 +18,14 @@ class _RequestScreenState extends State<RequestScreen> {
 
   @override
   void dispose() {
-    _userRequestBloc.add(RequestUnLoad());
     super.dispose();
+    _userRequestBloc.add(RequestUnLoad());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _userRequestBloc = BlocProvider.of<UserRequestBloc>(context);
   }
 
   @override
@@ -40,7 +48,6 @@ class _RequestScreenState extends State<RequestScreen> {
             if (state is RequestLoaded) {
               return receiptList(context, state.requests);
             }
-            _userRequestBloc = BlocProvider.of<UserRequestBloc>(context);
             _userRequestBloc.add(RequestLoad());
             return receiptList(context, []);
           },

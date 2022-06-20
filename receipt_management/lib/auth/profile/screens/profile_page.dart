@@ -274,19 +274,34 @@ class _ProfilePageState extends State<ProfilePage> {
                             'Save',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )),
-                      spacerSizedBox(w: 30),
+                      spacerSizedBox(w: 10),
+                      TextButton.icon(
+                          onPressed: () {
+                            _profileBloc.add(ProfileDelete());
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          label: const Text(
+                            'Delete',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          )),
+                      spacerSizedBox(w: 10),
                       TextButton.icon(
                           onPressed: () {
                             _profileBloc.add(ProfileUnload());
                           },
                           icon: const Icon(
                             Icons.close,
-                            color: Colors.red,
+                            color: Colors.black,
                           ),
                           label: const Text(
                             'Discard',
                             style: TextStyle(
-                              color: Colors.red,
+                              color: Colors.black,
                             ),
                           ))
                     ],
@@ -571,7 +586,7 @@ Widget summaryOfReceiptsElevatedButton(BuildContext context) {
             Icon(Icons.arrow_forward, size: 18, color: Colors.black),
           ]),
       onPressed: () {
-        Navigator.of(context).pushNamed('/summaryOfReceipts');
+        Navigator.of(context).pushNamed("/receiptSummary");
       },
       style: ElevatedButton.styleFrom(
           primary: Colors.white,

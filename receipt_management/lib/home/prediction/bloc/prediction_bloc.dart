@@ -15,8 +15,8 @@ class PredictionBloc extends Bloc<PredictionEvent, PredictionState> {
     try {
       final _prediction = await _predictionRepository.getPrediction();
       emit(PredictionLoaded(prediction: _prediction));
-    } catch (e) {
-      // emit(PredictionFailed(errorMsg: e.toString()));
+    } on Exception catch (e) {
+      emit(PredictionFailed(errorMsg: e.toString()));
     }
   }
 
@@ -25,7 +25,7 @@ class PredictionBloc extends Bloc<PredictionEvent, PredictionState> {
     try {
       emit(PredictionInitial());
     } catch (e) {
-      // emit(PredictionFailed(errorMsg: e.toString()));
+      emit(PredictionFailed(errorMsg: e.toString()));
     }
   }
 }

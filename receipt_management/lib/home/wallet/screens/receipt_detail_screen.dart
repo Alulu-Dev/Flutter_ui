@@ -7,7 +7,8 @@ import '../../../widgets/predefined_widgets.dart';
 
 class ReceiptDetailScreen extends StatefulWidget {
   final String receiptId;
-  ReceiptDetailScreen({Key? key, required this.receiptId}) : super(key: key);
+  const ReceiptDetailScreen({Key? key, required this.receiptId})
+      : super(key: key);
 
   @override
   State<ReceiptDetailScreen> createState() => _ReceiptDetailScreenState();
@@ -16,6 +17,7 @@ class ReceiptDetailScreen extends StatefulWidget {
 class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
   late final ReceiptBloc _receiptBloc;
   late final RequestBloc _requestBloc;
+
   @override
   void dispose() {
     _receiptBloc.add(ReceiptUnload());
@@ -23,6 +25,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
     super.dispose();
   }
 
+  @override
   void initState() {
     _receiptBloc = BlocProvider.of<ReceiptBloc>(context);
     _requestBloc = BlocProvider.of<RequestBloc>(context);
@@ -36,10 +39,16 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
         backgroundColor: const Color.fromARGB(255, 237, 237, 237),
         appBar: appBar(context, title: "Receipts Details"),
         body: SingleChildScrollView(
-          child: BlocBuilder<ReceiptBloc, ReceiptState>(
+          child: BlocConsumer<ReceiptBloc, ReceiptState>(
+            listener: ((context, state) {
+              if (state is ReceiptDeleted) {
+                Navigator.pop(context);
+              }
+            }),
             builder: (context, state) {
               if (state is ReceiptLoading) {
                 return const Center(
+                    heightFactor: 3,
                     child: CircularProgressIndicator.adaptive());
               }
               if (state is ReceiptLoaded) {
@@ -223,9 +232,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
         final price = items[index].itemPrice;
         final quantity = items[index].itemQuantity;
         return ListTile(
-          onLongPress: () {
-            print(name);
-          },
+          onLongPress: () {},
           visualDensity: const VisualDensity(vertical: 3),
           leading: SizedBox(
             width: 100,
@@ -233,11 +240,11 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
           ),
           title: Text(
             '\$ $price',
-            style: TextStyle(fontSize: 12),
+            style: const TextStyle(fontSize: 12),
           ),
           trailing: Text(
             'Qty: $quantity',
-            style: TextStyle(fontSize: 12),
+            style: const TextStyle(fontSize: 12),
           ),
         );
       },
@@ -277,7 +284,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
         height: 60,
         child: OutlinedButton(
           onPressed: () {
-            print('1');
+            _receiptBloc.add(ReceiptDelete(receiptID: widget.receiptId));
           },
           style: OutlinedButton.styleFrom(
             side: const BorderSide(width: 1.0, color: Colors.red),

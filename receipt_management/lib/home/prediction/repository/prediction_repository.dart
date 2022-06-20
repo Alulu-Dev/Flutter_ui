@@ -10,11 +10,15 @@ class PredictionRepository {
     try {
       final _responseBody = await _requestProvider.getPrediction();
 
+      if (_responseBody is String) {
+        throw Exception(_responseBody);
+      }
+
       final _prediction = PredictionModel.fromJson(_responseBody);
 
       return _prediction;
     } catch (e) {
-      throw Exception('No budget Object');
+      rethrow;
     }
   }
 }

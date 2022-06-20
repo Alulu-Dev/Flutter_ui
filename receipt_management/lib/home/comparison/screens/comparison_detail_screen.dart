@@ -25,6 +25,12 @@ class _ComparisonDetailScreenState extends State<ComparisonDetailScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _comparisonDetailBloc = BlocProvider.of<ComparisonDetailBloc>(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -70,8 +76,6 @@ class _ComparisonDetailScreenState extends State<ComparisonDetailScreen> {
                 );
               }
 
-              _comparisonDetailBloc =
-                  BlocProvider.of<ComparisonDetailBloc>(context);
               _comparisonDetailBloc
                   .add(ComparisonDetailLoad(id: widget.comparisonId));
               return const Center(

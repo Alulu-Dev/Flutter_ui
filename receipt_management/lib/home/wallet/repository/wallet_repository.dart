@@ -46,4 +46,9 @@ class WalletRepository {
         await walletDataProvider.receiptVerificationStatusCheck(receiptId);
     return _request;
   }
+
+  Future<bool> receiptDelete(String receiptId) async {
+    final _request = await walletDataProvider.receiptDelete(receiptId);
+    return _request;
+  }
 }

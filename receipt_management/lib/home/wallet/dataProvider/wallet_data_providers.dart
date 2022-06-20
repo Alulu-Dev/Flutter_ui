@@ -86,4 +86,21 @@ class WalletListProvider {
       throw Exception('Authentication Failed');
     }
   }
+
+  Future<bool> receiptDelete(String receiptID) async {
+    final sessionID = await _preference.getSession();
+
+    final responseDetails = await httpClient.delete(
+      Uri.parse("$_baseUrl/receipt/delete/$receiptID/"),
+      headers: {'cookie': 'session=$sessionID'},
+    );
+
+    if (responseDetails.statusCode == 200) {
+      final _responseBody = jsonDecode(responseDetails.body);
+
+      return _responseBody;
+    } else {
+      throw Exception('Authentication Failed');
+    }
+  }
 }

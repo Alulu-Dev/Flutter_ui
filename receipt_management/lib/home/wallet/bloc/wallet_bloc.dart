@@ -44,6 +44,7 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
   ReceiptBloc() : super(ReceiptUnloaded()) {
     on<ReceiptLoad>(_onReceiptLoad);
     on<ReceiptUnload>(_onReceiptUnload);
+    on<ReceiptDelete>(_onReceiptDelete);
   }
   Future<void> _onReceiptUnload(
       ReceiptUnload event, Emitter<ReceiptState> emit) async {
@@ -58,6 +59,15 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
       emit(ReceiptLoaded(receipt: receipt));
     } catch (e) {
       emit(ReceiptFailed(errorMsg: "No receipt Found"));
+    }
+  }
+
+  Future<void> _onReceiptDelete(
+      ReceiptDelete event, Emitter<ReceiptState> emit) async {
+    final receipt = await receiptRepository.receiptDelete(event.receiptID);
+    print(receipt);
+    if (receipt == true) {
+      emit(ReceiptDeleted());
     }
   }
 }

@@ -12,9 +12,6 @@ class LoginDataProvider {
   Future<String> loginRoute(String email, String pass) async {
     final response =
         await httpClient.post(Uri.parse("$_baseUrl/login/$email/$pass/"));
-
-    // session['Set-Cookie']!.split(';')[0].split('=')[1]
-
     if (response.statusCode == 200) {
       final _responseHeader = response.headers;
 

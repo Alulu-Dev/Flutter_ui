@@ -92,9 +92,9 @@ class LoginScreen extends StatelessWidget {
                             final email = emailTextController.text;
                             final pass = passwordTextController.text;
 
-                            final loginBloc =
+                            final _loginBloc =
                                 BlocProvider.of<AuthBloc>(context);
-                            loginBloc
+                            _loginBloc
                                 .add(LoginEvent(email: email, password: pass));
                           },
                           child: const Text(
@@ -122,6 +122,7 @@ Widget emailInputField(TextEditingController emailController) {
   return TextFormField(
     controller: emailController,
     keyboardType: TextInputType.emailAddress,
+    autocorrect: false,
     decoration: InputDecoration(
       prefixIcon: const Icon(Icons.email_outlined),
       hintText: "Email",
@@ -137,6 +138,8 @@ Widget passwordInputField(TextEditingController passwordController) {
   return TextFormField(
     controller: passwordController,
     obscureText: true,
+    autocorrect: false,
+    enableSuggestions: false,
     decoration: InputDecoration(
       prefixIcon: const Icon(Icons.lock_outline),
       hintText: "Password",

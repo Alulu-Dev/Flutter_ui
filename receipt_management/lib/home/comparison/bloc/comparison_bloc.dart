@@ -21,7 +21,6 @@ class ComparisonBloc extends Bloc<ComparisonEvent, ComparisonState> {
     try {
       emit(ComparisonLoading());
       final _itemsList = await _comparisonRepository.userComparisonList();
-
       emit(ComparisonLoaded(itemsList: _itemsList));
     } catch (e) {
       emit(ComparisonFailed(errorMsg: "Failed to load list"));
@@ -71,6 +70,7 @@ class ComparisonDetailBloc
     try {
       emit(ComparisonDetailsLoading());
       final details = await _comparisonRepository.updateComparison(event.id);
+      print(1);
       emit(ComparisonDetailsLoaded(result: details));
     } catch (e) {
       emit(ComparisonDetailFailed(errorMsg: "Failed to create comparison"));

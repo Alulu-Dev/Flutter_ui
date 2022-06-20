@@ -73,10 +73,16 @@ class _PredictionScreenState extends State<PredictionScreen> {
               );
             }
             if (state is PredictionFailed) {
-              _predictionBloc = BlocProvider.of<PredictionBloc>(context);
-              return const Text("No Data! Error was Raised");
+              final errorMsg = state.errorMsg.split(":");
+              return Center(
+                  child: Text(
+                errorMsg[1],
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ));
             }
-            // _predictionBloc = BlocProvider.of<PredictionBloc>(context);
             _predictionBloc.add(PredictionLoad());
             return const Text("No Data!");
           },

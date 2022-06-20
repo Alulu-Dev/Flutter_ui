@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -42,6 +41,15 @@ class ProfileRepository {
       return _response;
     } catch (e) {
       throw Exception('Profile Update Failed');
+    }
+  }
+
+  Future deleteProfile() async {
+    try {
+      final _response = await profileProvider.deleteProfile();
+      return _response;
+    } catch (e) {
+      rethrow;
     }
   }
 }

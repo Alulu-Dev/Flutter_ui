@@ -63,4 +63,19 @@ class ProfileProvider {
       throw Exception('Profile Loading Failed');
     }
   }
+
+  Future deleteProfile() async {
+    final sessionID = await _preference.getSession();
+
+    final _response = await httpClient.delete(
+      Uri.parse("$_baseUrl/user/"),
+      headers: {'cookie': 'session=$sessionID'},
+    );
+
+    if (_response.statusCode == 200) {
+      return _response.statusCode;
+    } else {
+      throw Exception(_response);
+    }
+  }
 }

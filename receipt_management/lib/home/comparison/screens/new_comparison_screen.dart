@@ -19,13 +19,11 @@ class _NewComparisonScreenState extends State<NewComparisonScreen> {
   late List<ComparableItemsModel> itemsListData = [];
   late List<ComparableItemsModel> searchedItems;
 
-  Future getAllReceipt() async {
-    final items = await comparisonRepository.getComparableItems();
-
+  Future getAllReceipt(List<ComparableItemsModel> apiItems) async {
     if (!mounted) return;
 
     setState(() {
-      itemsListData = items;
+      itemsListData = apiItems;
       searchedItems = itemsListData;
     });
   }
@@ -44,13 +42,14 @@ class _NewComparisonScreenState extends State<NewComparisonScreen> {
 
   @override
   void initState() {
-    getAllReceipt();
+    _compareCreateBloc = BlocProvider.of<ComparisonCreateBloc>(context);
     super.initState();
   }
 
   String query = '';
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Column(
       children: [
         Padding(
@@ -58,7 +57,12 @@ class _NewComparisonScreenState extends State<NewComparisonScreen> {
             child: buildSearch()),
         BlocConsumer<ComparisonCreateBloc, ComparisonCreateState>(
           listener: ((context, state) {
+            if (state is ComparisonCreateLoaded) {
+              getAllReceipt(state.items);
+            }
             if (state is ComparisonCreated) {
+              _compareCreateBloc.add(ComparisonCreateUnload());
+
               Navigator.of(context).pushReplacementNamed('/comparisonDetail',
                   arguments: state.id);
             }
@@ -68,16 +72,27 @@ class _NewComparisonScreenState extends State<NewComparisonScreen> {
               _compareCreateBloc.add(ComparisonCreateUnload());
             }
             if (state is ComparisonCreateLoaded) {
-              return receiptList(context, searchedItems);
+              return SizedBox(
+                  height: height * 0.45,
+                  child: itemsListData.isEmpty
+                      ? const Center(
+                          child: Text(
+                          "No Comparable Item!",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ))
+                      : receiptList(context, searchedItems));
             }
             if (state is ComparisonCreationFailed) {
               return Center(
                 child: Text(state.errorMsg),
               );
             }
-            _compareCreateBloc = BlocProvider.of<ComparisonCreateBloc>(context);
+
             _compareCreateBloc.add(ComparisonCreateLoad());
-            return const Text("No Data!");
+            return const CircularProgressIndicator.adaptive();
           },
         ),
       ],
@@ -109,7 +124,7 @@ class _NewComparisonScreenState extends State<NewComparisonScreen> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),
       child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
+        // physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: itemsList.length,
         itemBuilder: (BuildContext context, int index) {

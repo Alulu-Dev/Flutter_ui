@@ -23,7 +23,7 @@ class FormattedCategorySummary extends Equatable {
       final summary = MonthlySummary.fromJson(item);
       monthlySummaries.add(summary);
     }
-    late CurrentMonthSummary currentMonthSummary =
+    final CurrentMonthSummary currentMonthSummary =
         CurrentMonthSummary.fromJson(json["current_month_expense"]);
 
     return FormattedCategorySummary(
@@ -90,7 +90,7 @@ class CurrentMonthSummary extends Equatable {
   factory CurrentMonthSummary.fromJson(Map<String, dynamic> json) {
     return CurrentMonthSummary(
       name: json['name'],
-      total: json['Total'],
+      total: json['Total'].toDouble(),
     );
   }
 }
@@ -121,7 +121,7 @@ class SingleCategorySummary extends Equatable {
     return SingleCategorySummary(
       totalPrice: json['total'],
       date: json['date'],
-      budget: json['budget'],
+      budget: json['budget'].toDouble(),
       catName: json['category_name'],
       receipts: receiptsList,
     );

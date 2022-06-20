@@ -20,8 +20,12 @@ class PredictionProvider {
     if (response.statusCode == 200) {
       final _responseBody = jsonDecode(response.body);
       return _responseBody;
+    }
+    if (response.statusCode == 400) {
+      final _responseBody = jsonDecode(response.body);
+      return _responseBody;
     } else {
-      throw Exception('Budget Load Failed');
+      throw Exception('Predication Failed to be generated');
     }
   }
 }

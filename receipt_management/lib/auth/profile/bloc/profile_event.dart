@@ -10,6 +10,8 @@ class ProfileEdit extends ProfileEvent {}
 
 class ProfileLogout extends ProfileEvent {}
 
+class ProfileDelete extends ProfileEvent {}
+
 class ProfileSave extends ProfileEvent {
   final File profileImage;
   final String firstName;

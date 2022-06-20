@@ -10,7 +10,7 @@ import '../../../widgets/input_widgets.dart';
 import '../../../widgets/predefined_widgets.dart';
 
 class RegisterScreen extends StatefulWidget {
-  RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();

@@ -23,13 +23,11 @@ class _ComparisonListScreenState extends State<ComparisonListScreen> {
   late List<ComparisonModel> itemsListData = [];
   late List<ComparisonModel> searchedItems;
 
-  Future getAllReceipt() async {
-    final items = await comparisonRepository.userComparisonList();
-
+  Future getAllReceipt(List<ComparisonModel> apiItems) async {
     if (!mounted) return;
 
     setState(() {
-      itemsListData = items;
+      itemsListData = apiItems;
       searchedItems = itemsListData;
     });
   }
@@ -48,7 +46,8 @@ class _ComparisonListScreenState extends State<ComparisonListScreen> {
 
   @override
   void initState() {
-    getAllReceipt();
+    searchedItems = [];
+    _compareBloc = BlocProvider.of<ComparisonBloc>(context);
     super.initState();
   }
 
@@ -78,7 +77,7 @@ class _ComparisonListScreenState extends State<ComparisonListScreen> {
                         context: context,
                         builder: (context) {
                           return const NewComparisonScreen();
-                        });
+                        }).then((value) => deactivate());
                   },
                   child: Row(
                     children: const [
@@ -99,22 +98,42 @@ class _ComparisonListScreenState extends State<ComparisonListScreen> {
             ],
           ),
         ),
-        BlocBuilder<ComparisonBloc, ComparisonState>(
+        BlocConsumer<ComparisonBloc, ComparisonState>(
+          listener: ((context, state) {
+            if (state is ComparisonLoaded) {
+              getAllReceipt(state.itemsList);
+            }
+          }),
           builder: (context, state) {
             if (state is ComparisonLoading) {
               return const Center(child: CircularProgressIndicator.adaptive());
             }
             if (state is ComparisonLoaded) {
-              getAllReceipt();
-              return receiptList(context, searchedItems);
+              if (searchedItems.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                      child: Text(
+                    "No data!",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+                );
+              } else {
+                return receiptList(context, searchedItems);
+              }
             }
             if (state is ComparisonFailed) {
               return Center(
                 child: Text(state.errorMsg),
               );
             }
-            _compareBloc = BlocProvider.of<ComparisonBloc>(context);
-            _compareBloc.add(ComparisonLoad());
+            if (state is ComparisonInitial) {
+              _compareBloc.add(ComparisonLoad());
+            }
+
             return const Text(
                 "Save Money by getting the best \n price for your next purchase");
           },
@@ -166,8 +185,10 @@ class _ComparisonListScreenState extends State<ComparisonListScreen> {
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
       child: TextButton(
         onPressed: () {
-          Navigator.of(context).pushNamed('/comparisonDetail', arguments: id);
           _compareBloc.add(ComparisonUnload());
+          Navigator.of(context)
+              .pushNamed('/comparisonDetail', arguments: id)
+              .then((value) => deactivate());
         },
         child: Column(
           children: [

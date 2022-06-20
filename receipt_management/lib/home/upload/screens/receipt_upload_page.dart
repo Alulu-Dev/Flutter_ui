@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:receipt_management/home/upload/bloc/uploading_event.dart';
+import 'package:receipt_management/home/upload/bloc/bloc.dart';
+import 'package:receipt_management/home/upload/screens/receipt_reading_screen.dart';
 
 import '../../../widgets/app_logo_widget.dart';
 import '../../../widgets/predefined_widgets.dart';
-import '../bloc/uploading_bloc.dart';
 
 class ReceiptUploadPage extends StatefulWidget {
   const ReceiptUploadPage({Key? key}) : super(key: key);
@@ -34,8 +34,6 @@ class _ReceiptUploadPageState extends State<ReceiptUploadPage> {
 
       final _uploadBloc = BlocProvider.of<UploadBloc>(context);
       _uploadBloc.add(UploadImage(receiptImage: File(image.path)));
-      Navigator.of(context)
-          .pushNamed('/receiptScanning', arguments: this.image);
     } on PlatformException catch (e) {
       log('failed to get photos $e');
     }
@@ -43,69 +41,87 @@ class _ReceiptUploadPageState extends State<ReceiptUploadPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Expanded(
-          flex: 2,
-          child: SizedBox(),
-        ),
-        Expanded(
-          flex: 6,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              spacerSizedBox(h: 50),
-              greenAppLogoContainer(),
-              spacerSizedBox(h: 20),
-              helpButton(),
-              spacerSizedBox(h: 50),
-              SizedBox(
-                width: 120,
-                height: 45,
-                child: FloatingActionButton(
-                  heroTag: 'upload-photo',
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  onPressed: () => pickImage(ImageSource.gallery),
-                  child: const Text(
-                    'UPLOAD',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+    return BlocConsumer<UploadBloc, UploadState>(
+      listener: (context, state) {
+        if (state is UploadingImage) {
+          Navigator.of(context).pushNamed('/receiptScanning', arguments: [
+            state.receiptImage,
+            state.receiptData,
+          ]);
+        }
+      },
+      builder: (context, state) {
+        if (state is UploadProcessing) {
+          return const Padding(
+            padding: EdgeInsets.all(18.0),
+            child: Center(child: CircularProgressIndicator.adaptive()),
+          );
+        }
+        return Row(
+          children: [
+            const Expanded(
+              flex: 2,
+              child: SizedBox(),
+            ),
+            Expanded(
+              flex: 6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  spacerSizedBox(h: 50),
+                  greenAppLogoContainer(),
+                  spacerSizedBox(h: 20),
+                  helpButton(),
+                  spacerSizedBox(h: 50),
+                  SizedBox(
+                    width: 120,
+                    height: 45,
+                    child: FloatingActionButton(
+                      heroTag: 'upload-photo',
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      onPressed: () => pickImage(ImageSource.gallery),
+                      child: const Text(
+                        'UPLOAD',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              spacerSizedBox(h: 40),
-              SizedBox(
-                width: 155,
-                height: 45,
-                child: FloatingActionButton(
-                  heroTag: 'take-photo',
-                  backgroundColor:
-                      Colors.white, // const Color.fromRGBO(139, 208, 161, 1),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  onPressed: () => pickImage(ImageSource.camera),
-                  child: const Text(
-                    'TAKE PHOTO',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                  spacerSizedBox(h: 40),
+                  SizedBox(
+                    width: 155,
+                    height: 45,
+                    child: FloatingActionButton(
+                      heroTag: 'take-photo',
+                      backgroundColor: Colors
+                          .white, // const Color.fromRGBO(139, 208, 161, 1),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      onPressed: () => pickImage(ImageSource.camera),
+                      child: const Text(
+                        'TAKE PHOTO',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        ),
-        const Expanded(
-          flex: 2,
-          child: SizedBox(),
-        )
-      ],
+            ),
+            const Expanded(
+              flex: 2,
+              child: SizedBox(),
+            )
+          ],
+        );
+      },
     );
   }
 }

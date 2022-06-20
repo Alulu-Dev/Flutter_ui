@@ -15,37 +15,65 @@ class WalletPage extends StatefulWidget {
 
 class _WalletPageState extends State<WalletPage> {
   final WalletRepository walletRepository = WalletRepository();
+  late final WalletBloc _walletBloc;
   late List<WalletModel> itemsListData = [];
   late List<WalletModel> searchedItems;
 
-  Future getAllReceipt() async {
-    final receipts = await walletRepository.userWalletRoute();
-
+  Future getAllReceipt(List<WalletModel> apiReceipts) async {
     if (!mounted) return;
 
     setState(() {
-      itemsListData = receipts;
+      itemsListData = apiReceipts;
       searchedItems = itemsListData;
     });
   }
 
   @override
+  void dispose() {
+    _walletBloc.add(WalletUnload());
+    super.dispose();
+  }
+
+  @override
+  void deactivate() {
+    _walletBloc.add(WalletUnload());
+    super.deactivate();
+  }
+
+  @override
   void initState() {
     super.initState();
-    getAllReceipt();
+    _walletBloc = BlocProvider.of<WalletBloc>(context);
     searchedItems = [];
   }
 
   String query = '';
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WalletBloc, WalletState>(
+    return BlocConsumer<WalletBloc, WalletState>(
+      listener: ((context, state) {
+        if (state is WalletLoaded) {
+          if (itemsListData.isEmpty) {
+            getAllReceipt(state.receipts);
+          }
+        }
+      }),
       builder: (context, state) {
         if (state is WalletLoaded) {
           return Column(
             children: [
               buildSearch(),
-              receiptList(context, searchedItems),
+              itemsListData.isEmpty
+                  ? const Center(
+                      child: Text(
+                        "No Receipt Uploaded!",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  : receiptList(context, searchedItems),
             ],
           );
         }
@@ -54,9 +82,8 @@ class _WalletPageState extends State<WalletPage> {
             child: Text(state.errorMsg),
           );
         }
-        final walletBloc = BlocProvider.of<WalletBloc>(context);
 
-        walletBloc.add(WalletLoad());
+        _walletBloc.add(WalletLoad());
         return Center(
           heightFactor: 3,
           child: Column(
@@ -99,71 +126,72 @@ class _WalletPageState extends State<WalletPage> {
       searchedItems = matchQuery;
     });
   }
-}
 
-Widget receiptList(BuildContext context, List<WalletModel> receiptListData) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),
-    child: ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: receiptListData.length,
-      itemBuilder: (BuildContext context, int index) {
-        return receiptCard(context, index, receiptListData[index].merchant,
-            receiptListData[index].totalPrice, receiptListData[index].id);
-      },
-    ),
-  );
-}
+  Widget receiptList(BuildContext context, List<WalletModel> receiptListData) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),
+      child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: receiptListData.length,
+        itemBuilder: (BuildContext context, int index) {
+          return receiptCard(context, index, receiptListData[index].merchant,
+              receiptListData[index].totalPrice, receiptListData[index].id);
+        },
+      ),
+    );
+  }
 
-Widget receiptCard(BuildContext context, index, merchantName, totalPrice, id) {
-  return Container(
-    padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
-    child: TextButton(
-      onPressed: () {
-        final walletBloc = BlocProvider.of<WalletBloc>(context);
-        walletBloc.add(WalletUnload());
-
-        Navigator.of(context).pushNamed('/receiptDetails', arguments: id);
-      },
-      child: Column(
-        children: [
-          ListTile(
-            contentPadding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-            leading: Container(
-              width: 42.0,
-              height: 42.0,
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.2),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/receipt_icon.png'),
-                  fit: BoxFit.cover,
+  Widget receiptCard(
+      BuildContext context, index, merchantName, totalPrice, id) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
+      child: TextButton(
+        onPressed: () {
+          _walletBloc.add(WalletUnload());
+          Navigator.of(context)
+              .pushNamed('/receiptDetails', arguments: id)
+              .then((value) => deactivate());
+        },
+        child: Column(
+          children: [
+            ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+              leading: Container(
+                width: 42.0,
+                height: 42.0,
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.2),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/receipt_icon.png'),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(100.0)),
                 ),
-                borderRadius: const BorderRadius.all(Radius.circular(100.0)),
+              ),
+              title: RichText(
+                overflow: TextOverflow.ellipsis,
+                strutStyle: const StrutStyle(fontSize: 12.0),
+                text: TextSpan(
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    text: merchantName),
+              ),
+              subtitle: Text(
+                "\$ $totalPrice",
+                style: const TextStyle(color: Colors.green, fontSize: 15),
               ),
             ),
-            title: RichText(
-              overflow: TextOverflow.ellipsis,
-              strutStyle: const StrutStyle(fontSize: 12.0),
-              text: TextSpan(
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  text: merchantName),
-            ),
-            subtitle: Text(
-              "\$ $totalPrice",
-              style: const TextStyle(color: Colors.green, fontSize: 15),
-            ),
-          ),
-          Container(
-            height: 1.5,
-            color: const Color(0xff74F2C4),
-          )
-        ],
+            Container(
+              height: 1.5,
+              color: const Color(0xff74F2C4),
+            )
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

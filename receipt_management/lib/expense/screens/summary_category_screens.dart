@@ -23,6 +23,12 @@ class _ExpenseSummaryScreenState extends State<ExpenseSummaryScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _summaryBloc = BlocProvider.of<CategorySummaryBloc>(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -66,7 +72,6 @@ class _ExpenseSummaryScreenState extends State<ExpenseSummaryScreen> {
                   ),
                 );
               }
-              _summaryBloc = BlocProvider.of<CategorySummaryBloc>(context);
 
               _summaryBloc.add(CategorySummaryLoad());
               return const SizedBox(
@@ -99,7 +104,7 @@ class _ExpenseSummaryScreenState extends State<ExpenseSummaryScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Expense',
+            'This Month\'s Expense',
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
           Row(
