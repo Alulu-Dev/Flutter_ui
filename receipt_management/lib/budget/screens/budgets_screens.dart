@@ -27,15 +27,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
   }
 
   @override
-<<<<<<< HEAD
   void initState() {
     _budgetBloc = BlocProvider.of<BudgetBloc>(context);
     super.initState();
   }
 
   @override
-=======
->>>>>>> ae7ddb1279a7d89d582327484da89ccb8d68af8a
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -66,11 +63,6 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   child: Text("No Data"),
                 );
               }
-<<<<<<< HEAD
-
-=======
-              _budgetBloc = BlocProvider.of<BudgetBloc>(context);
->>>>>>> ae7ddb1279a7d89d582327484da89ccb8d68af8a
               _budgetBloc.add(BudgetLoad());
               return Column(
                 children: [

@@ -16,10 +16,7 @@ class BudgetAddScreen extends StatefulWidget {
 class _BudgetAddScreenState extends State<BudgetAddScreen> {
   final BudgetRepository budgetRepository = BudgetRepository();
   late final NewBudgetBloc _newBudgetBloc;
-<<<<<<< HEAD
   late final BudgetBloc _budgetBloc;
-=======
->>>>>>> ae7ddb1279a7d89d582327484da89ccb8d68af8a
 
   late double screenHeight;
   late double screenWidth;
@@ -67,20 +64,14 @@ class _BudgetAddScreenState extends State<BudgetAddScreen> {
   void initState() {
     super.initState();
     getAllCategories();
-<<<<<<< HEAD
     _newBudgetBloc = BlocProvider.of<NewBudgetBloc>(context);
     _budgetBloc = BlocProvider.of<BudgetBloc>(context);
-=======
->>>>>>> ae7ddb1279a7d89d582327484da89ccb8d68af8a
   }
 
   @override
   void dispose() {
     _newBudgetBloc.add(NewBudgetUnload());
-<<<<<<< HEAD
     _budgetBloc.add(BudgetUnload());
-=======
->>>>>>> ae7ddb1279a7d89d582327484da89ccb8d68af8a
     super.dispose();
   }
 
@@ -137,21 +128,12 @@ class _BudgetAddScreenState extends State<BudgetAddScreen> {
                         return autoCollapseExpansionTile(categoriesApi);
                       }
                       if (state is NewBudgetFailed) {
-<<<<<<< HEAD
                         return Padding(
                           padding: const EdgeInsets.all(10),
                           child: Center(child: Text(state.errorMsg)),
                         );
                       }
                       if (state is NewBudgetInitial) {}
-=======
-                        print(state.errorMsg);
-                      }
-                      if (state is NewBudgetInitial) {
-                        _newBudgetBloc =
-                            BlocProvider.of<NewBudgetBloc>(context);
-                      }
->>>>>>> ae7ddb1279a7d89d582327484da89ccb8d68af8a
 
                       _newBudgetBloc.add(NewBudgetLoad());
                       return autoCollapseExpansionTile([]);
