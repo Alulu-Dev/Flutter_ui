@@ -2,11 +2,11 @@
 
 ### Team members name
 
-Beken adugna
-Eshtaol Girma
-Mikiyas Daniel
-Rediate Befekadu
-Zekariyas Alemu
+- Beken adugna
+- Eshtaol Girma
+- Mikiyas Daniel
+- Rediate Befekadu
+- Zekariyas Alemu
 
 ### Advisor name
 
