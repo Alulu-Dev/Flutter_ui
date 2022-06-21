@@ -19,11 +19,11 @@ Receipts are documents that function as acknowledgment that something of value h
 Through understanding the problem better, we observed the main problem in our country being that vendors use fake register machines to print out receipts and give it to customers like the real one. This means vendors own two register machines, this will make the government not get the right amount of vat and all the money will be for the vendors.
 Also, for personal expense management our app will try to provide this feature. Previous apps gave a solution by just only giving the receipts a category. As receipts play a great role in financial management, but usually receipts are small pieces of paper which are not ideal to store and even if stored they are hard to do analyses and summary, this is where we want to provide a software solution. When we read the important information from a photo of receipt and format and insert it into a database and read the data not just scan. This gives the ability to do queries and individual access to each field as pdf files are not suitable to do analysis. Our software aims to give the ability to produce a summary of the transactions, business visited frequently and price comparison for products or services made at different times and places, and by using pattern recognition algorithms over consumer purchase history data it predicts future expenses like things that they will buy the next day or week.
 
-● Solve customers’ problems of losing receipts and being unorganized by taking pictures, read data and inserting it on database for next use
-● Lessen tax fraud by checking tin number and ticket number on database
-● provide daily expense management system for free
-● Provide where to purchase what information using pattern recognition algorithms over consumer purchase history
-● Predicts future expenses and things that they will buy the next day or week.
+- ● Solve customers’ problems of losing receipts and being unorganized by taking pictures, read data and inserting it on database for next use
+- ● Lessen tax fraud by checking tin number and ticket number on database
+- ● provide daily expense management system for free
+- ● Provide where to purchase what information using pattern recognition algorithms over consumer purchase history
+- ● Predicts future expenses and things that they will buy the next day or week.
 
 ## Tools used
 
