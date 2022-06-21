@@ -1,16 +1,27 @@
 # receipt_management
 
-A new Flutter project.
+receipt management app aims to:
 
-## Getting Started
+Solve customers problems of losing receipts and being unorganized by taking pictures, read data and inserting it on database for next use
+Lessen tax fraud
+provide monthly expense management system
+Provide where to purchase what information using pattern recognition algorithms over consumer purchase history
+Predicts future expenses and things that they will buy the next day or week.
 
-This project is a starting point for a Flutter application.
+# external sources
 
-A few resources to get you started if this is your first Flutter project:
+```links
+https://www.youtube.com/watch?v=Vttl7WGtkgg&list=PLuk-w_OkGoQc89SzKnXGtJAocVDo1zFGK&index=81
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```link
+https://www.youtube.com/watch?v=ZHdg2kfKmjI
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```link
+https://www.youtube.com/watch?v=tMM9ty4Wfq0&t=451s
+```
+
+```link
+https://google.github.io/charts/flutter/example/axes/hidden_ticks_and_labels_axis.html
+```
